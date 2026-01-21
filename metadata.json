@@ -1,0 +1,8 @@
+{
+  "name": "Dashboard",
+  "description": "A high-end CRM featuring real-time analytics, project management, and an AI-powered assistant.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ]
+}
