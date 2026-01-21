@@ -1,21 +1,24 @@
 
-import { GoogleGenAI, GenerateContentResponse } from "@google/genai";
+import { GoogleGenAI } from "@google/genai";
 
-const getAI = () => {
-  const apiKey = process.env.API_KEY;
-  if (!apiKey) {
-    console.warn("API_KEY is missing. AI features will be disabled.");
-    return null;
-  }
-  return new GoogleGenAI({ apiKey });
-};
+/* 
+ * Gemini Service using @google/genai
+ * Always creates a new GoogleGenAI instance with { apiKey: process.env.API_KEY } 
+ * right before making API calls as per the latest SDK guidelines.
+ */
 
 export const generateChatResponse = async (history: { role: 'user' | 'model', parts: { text: string }[] }[]) => {
-  const ai = getAI();
-  if (!ai) return "AI services are not configured. Please add an API Key to your environment.";
+  const apiKey = process.env.API_KEY;
+  if (!apiKey) {
+    return "AI services are not configured. Please add an API Key to your environment.";
+  }
+
+  /* Create instance inside the function as recommended to ensure fresh environment config */
+  const ai = new GoogleGenAI({ apiKey });
 
   try {
-    const chat = ai.models.generateContent({
+    /* Use gemini-3-flash-preview for general text/chat tasks */
+    const response = await ai.models.generateContent({
       model: 'gemini-3-flash-preview',
       contents: history.map(h => ({ role: h.role, parts: h.parts })),
       config: {
@@ -23,7 +26,7 @@ export const generateChatResponse = async (history: { role: 'user' | 'model', pa
       }
     });
 
-    const response = await chat;
+    /* Correct property access: .text (not .text()) as per SDK rules */
     return response.text;
   } catch (error) {
     console.error("Gemini API Error:", error);
@@ -32,17 +35,22 @@ export const generateChatResponse = async (history: { role: 'user' | 'model', pa
 };
 
 export const summarizeRequests = async (requests: any[]) => {
-  const ai = getAI();
-  if (!ai) return "AI services are not configured.";
+  const apiKey = process.env.API_KEY;
+  if (!apiKey) return "AI services are not configured.";
 
+  const ai = new GoogleGenAI({ apiKey });
   const prompt = `Summarize these requests and provide actionable advice: ${JSON.stringify(requests)}`;
+
   try {
     const response = await ai.models.generateContent({
       model: 'gemini-3-flash-preview',
-      contents: [{ parts: [{ text: prompt }] }]
+      contents: prompt
     });
+    
+    /* Correct property access: .text */
     return response.text;
   } catch (error) {
+    console.error("Gemini Summarization Error:", error);
     return "Error generating summary.";
   }
 };

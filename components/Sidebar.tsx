@@ -10,25 +10,25 @@ interface SidebarProps {
 const Sidebar: React.FC<SidebarProps> = ({ activeNav, setActiveNav }) => {
   const menuItems: { id: NavItem, label: string, icon: string, badge?: number }[] = [
     { id: 'dashboard', label: 'Dashboard', icon: 'dashboard' },
-    { id: 'clients', label: 'Clients', icon: 'group' },
-    { id: 'projects', label: 'Projects', icon: 'view_kanban' },
-    { id: 'requests', label: 'Requests', icon: 'chat', badge: 2 },
-    { id: 'media', label: 'Media', icon: 'photo_library' },
-    { id: 'chatbot', label: 'Assistant', icon: 'smart_toy' },
-    { id: 'chatbot_builder', label: 'Chatbot Builder', icon: 'settings_suggest' },
-    { id: 'chat_client', label: 'Messages', icon: 'forum' },
+    { id: 'tours', label: 'Virtual Tours', icon: '360' },
+    { id: 'leads', label: 'Viewing Leads', icon: 'event_available', badge: 4 },
+    { id: 'clients', label: 'Agencies', icon: 'business' },
+    { id: 'assets', label: '360 Assets', icon: 'view_in_ar' },
+    { id: 'concierge', label: 'AI Concierge', icon: 'support_agent' },
+    { id: 'guide_builder', label: 'Guide Builder', icon: 'architecture' },
+    { id: 'messages', label: 'Live Chat', icon: 'forum' },
   ];
 
   return (
     <aside className="flex w-72 flex-col justify-between border-r border-slate-200 dark:border-slate-800 bg-surface-light dark:bg-surface-dark h-full shrink-0 transition-colors duration-300">
       <div className="flex flex-col gap-6 p-6">
         <div className="flex items-center gap-3 pb-6 border-b border-slate-100 dark:border-slate-800">
-          <div className="relative flex items-center justify-center size-12 rounded-xl bg-slate-100 dark:bg-slate-800 shadow-inner-light">
-            <span className="text-slate-400 dark:text-slate-500 text-[10px] font-bold">LOGO</span>
+          <div className="relative flex items-center justify-center size-12 rounded-xl bg-primary text-white shadow-soft">
+            <span className="material-symbols-outlined text-3xl">streetview</span>
           </div>
           <div className="flex flex-col">
-            <h1 className="text-secondary dark:text-white text-lg font-bold leading-tight">TEXT</h1>
-            <p className="text-slate-500 dark:text-slate-400 text-xs font-medium uppercase tracking-wider">SUBTEXT</p>
+            <h1 className="text-secondary dark:text-white text-lg font-bold leading-tight uppercase tracking-tighter">Vortex</h1>
+            <p className="text-slate-500 dark:text-slate-400 text-[10px] font-black uppercase tracking-widest">Tours & Analytics</p>
           </div>
         </div>
 

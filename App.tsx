@@ -2,8 +2,14 @@
 import React, { useState } from 'react';
 import Sidebar from './components/Sidebar';
 import Dashboard from './views/Dashboard';
+import ToursView from './views/ToursView';
+import LeadsView from './views/LeadsView';
+import AgenciesView from './views/AgenciesView';
+import MediaView from './views/MediaView';
 import ChatbotView from './views/ChatbotView';
 import ChatbotBuilder from './views/ChatbotBuilder';
+import ChatClientView from './views/ChatClientView';
+import SettingsView from './views/SettingsView';
 import { NavItem } from './types';
 
 const App: React.FC = () => {
@@ -11,27 +17,23 @@ const App: React.FC = () => {
 
   const renderContent = () => {
     switch (activeNav) {
-      case 'dashboard':
-        return <Dashboard />;
-      case 'chatbot':
-        return <ChatbotView />;
-      case 'chatbot_builder':
-        return <ChatbotBuilder />;
-      default:
-        return (
-          <div className="flex flex-col items-center justify-center h-full text-slate-400">
-            <span className="material-symbols-outlined text-6xl mb-4">construction</span>
-            <h2 className="text-2xl font-bold">Work in Progress</h2>
-            <p>The {activeNav} section is coming soon.</p>
-          </div>
-        );
+      case 'dashboard': return <Dashboard />;
+      case 'tours': return <ToursView />;
+      case 'leads': return <LeadsView />;
+      case 'clients': return <AgenciesView />;
+      case 'assets': return <MediaView />;
+      case 'concierge': return <ChatbotView />;
+      case 'guide_builder': return <ChatbotBuilder />;
+      case 'messages': return <ChatClientView />;
+      case 'settings': return <SettingsView />;
+      default: return <Dashboard />;
     }
   };
 
   return (
     <div className="flex h-screen w-full bg-background-light dark:bg-background-dark transition-colors duration-300">
       <Sidebar activeNav={activeNav} setActiveNav={setActiveNav} />
-      <main className="flex-1 h-full overflow-y-auto">
+      <main className="flex-1 h-full overflow-hidden">
         {renderContent()}
       </main>
     </div>

@@ -4,14 +4,14 @@ import { GoogleGenAI } from "@google/genai";
 
 const ChatbotBuilder: React.FC = () => {
   const [config, setConfig] = useState({
-    name: 'Customer Bot',
-    description: 'A helpful bot for our main website.',
-    personality: 'Professional',
-    instructions: 'You are a helpful customer service representative. You answer questions about our services and help users find the right project for them.'
+    name: 'Virtual Agent Sam',
+    description: 'AI-powered guide for residential properties.',
+    personality: 'Welcoming',
+    instructions: 'You are an expert real estate virtual guide. You are showing a high-end apartment. You highlight the natural lighting, the hardwood floors, and the smart home features. Be welcoming, knowledgeable, and professional.'
   });
 
   const [previewMessages, setPreviewMessages] = useState<{role: 'user' | 'model', text: string}[]>([
-    { role: 'model', text: 'Hello! How can I help you today?' }
+    { role: 'model', text: 'Welcome to this beautiful penthouse! Feel free to explore the rooms. Would you like a guided walkthrough or do you have a specific question about the kitchen?' }
   ]);
   const [previewInput, setPreviewInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
@@ -28,7 +28,7 @@ const ChatbotBuilder: React.FC = () => {
 
     const apiKey = process.env.API_KEY;
     if (!apiKey) {
-      setPreviewMessages(prev => [...prev, { role: 'user', text: previewInput.trim() }, { role: 'model', text: "Error: No API Key found in environment. Please configure your key to use live preview." }]);
+      setPreviewMessages(prev => [...prev, { role: 'user', text: previewInput.trim() }, { role: 'model', text: "Error: No API Key found for AI guide simulation." }]);
       setPreviewInput('');
       return;
     }
@@ -47,13 +47,13 @@ const ChatbotBuilder: React.FC = () => {
           parts: [{ text: m.text }]
         })),
         config: {
-          systemInstruction: `Personality: ${config.personality}. ${config.instructions}`,
+          systemInstruction: `You are simulating the behavior of a Virtual Tour Guide. Personality: ${config.personality}. Core Instructions: ${config.instructions}. Keep responses concise as if being read on a mobile device while exploring a property.`,
         }
       });
 
-      setPreviewMessages(prev => [...prev, { role: 'model', text: response.text || "I'm having trouble responding right now." }]);
+      setPreviewMessages(prev => [...prev, { role: 'model', text: response.text || "I'm focusing on the scan data... ask me again!" }]);
     } catch (error) {
-      setPreviewMessages(prev => [...prev, { role: 'model', text: "Connection error. Please check your API key settings." }]);
+      setPreviewMessages(prev => [...prev, { role: 'model', text: "AI guide disconnected. Please check configuration." }]);
     } finally {
       setIsTyping(false);
     }
@@ -63,15 +63,12 @@ const ChatbotBuilder: React.FC = () => {
     <div className="flex flex-col h-full bg-slate-50 dark:bg-background-dark overflow-hidden">
       <header className="p-8 border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-surface-dark flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-extrabold text-secondary dark:text-white tracking-tight">Chatbot Builder</h1>
-          <p className="text-slate-500 dark:text-slate-400">Design and deploy custom AI agents for your clients.</p>
+          <h1 className="text-3xl font-extrabold text-secondary dark:text-white tracking-tight">AI Guide Builder</h1>
+          <p className="text-slate-500 dark:text-slate-400">Configure your property-specific virtual concierge.</p>
         </div>
         <div className="flex gap-4">
-          <button className="h-11 px-6 rounded-full border border-slate-200 dark:border-slate-700 font-bold text-sm text-slate-600 dark:text-slate-300 hover:bg-slate-50 transition-all">
-            Save Draft
-          </button>
           <button className="h-11 px-6 rounded-full bg-primary text-white font-bold text-sm hover:bg-primary-dark shadow-lg shadow-primary/30 transition-all">
-            Publish Bot
+            Deploy to Tours
           </button>
         </div>
       </header>
@@ -80,43 +77,43 @@ const ChatbotBuilder: React.FC = () => {
         {/* Left Pane: Config */}
         <div className="w-1/2 overflow-y-auto p-8 border-r border-slate-200 dark:border-slate-800 flex flex-col gap-8">
           <section className="flex flex-col gap-4">
-            <h3 className="text-lg font-bold flex items-center gap-2">
-              <span className="material-symbols-outlined text-primary">info</span>
-              General Information
+            <h3 className="text-lg font-bold flex items-center gap-2 text-primary">
+              <span className="material-symbols-outlined">identity_platform</span>
+              Guide Identity
             </h3>
-            <div className="grid grid-cols-1 gap-4">
+            <div className="flex flex-col gap-4 bg-white dark:bg-surface-dark p-6 rounded-3xl border border-slate-100 dark:border-slate-800">
               <div className="flex flex-col gap-1.5">
-                <label className="text-xs font-bold uppercase text-slate-400">Bot Name</label>
+                <label className="text-xs font-bold uppercase text-slate-400 tracking-widest">Guide Display Name</label>
                 <input 
                   type="text" 
                   value={config.name}
                   onChange={(e) => setConfig({...config, name: e.target.value})}
-                  className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all text-slate-700 dark:text-slate-200"
+                  className="bg-slate-50 dark:bg-slate-900 border-none rounded-xl px-4 py-3 text-slate-700 dark:text-slate-200"
                 />
               </div>
               <div className="flex flex-col gap-1.5">
-                <label className="text-xs font-bold uppercase text-slate-400">Description</label>
+                <label className="text-xs font-bold uppercase text-slate-400 tracking-widest">Role Description</label>
                 <input 
                   type="text" 
                   value={config.description}
                   onChange={(e) => setConfig({...config, description: e.target.value})}
-                  className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all text-slate-700 dark:text-slate-200"
+                  className="bg-slate-50 dark:bg-slate-900 border-none rounded-xl px-4 py-3 text-slate-700 dark:text-slate-200"
                 />
               </div>
             </div>
           </section>
 
           <section className="flex flex-col gap-4">
-            <h3 className="text-lg font-bold flex items-center gap-2">
-              <span className="material-symbols-outlined text-primary">psychology</span>
-              Personality & Behavior
+            <h3 className="text-lg font-bold flex items-center gap-2 text-primary">
+              <span className="material-symbols-outlined">neurology</span>
+              Guide Logic & Persona
             </h3>
             <div className="grid grid-cols-3 gap-3">
-              {['Friendly', 'Professional', 'Tech-Savvy'].map(p => (
+              {['Welcoming', 'Direct', 'Storyteller'].map(p => (
                 <button 
                   key={p}
                   onClick={() => setConfig({...config, personality: p})}
-                  className={`py-3 px-4 rounded-xl text-sm font-bold border-2 transition-all ${
+                  className={`py-3 px-4 rounded-xl text-xs font-bold border-2 transition-all ${
                     config.personality === p 
                     ? 'border-primary bg-primary/5 text-primary' 
                     : 'border-slate-100 dark:border-slate-800 text-slate-500 hover:border-slate-300'
@@ -126,14 +123,14 @@ const ChatbotBuilder: React.FC = () => {
                 </button>
               ))}
             </div>
-            <div className="flex flex-col gap-1.5">
-              <label className="text-xs font-bold uppercase text-slate-400">System Instructions</label>
+            <div className="flex flex-col gap-1.5 bg-white dark:bg-surface-dark p-6 rounded-3xl border border-slate-100 dark:border-slate-800">
+              <label className="text-xs font-bold uppercase text-slate-400 tracking-widest">Contextual Knowledge</label>
               <textarea 
-                rows={6}
+                rows={5}
                 value={config.instructions}
                 onChange={(e) => setConfig({...config, instructions: e.target.value})}
-                placeholder="How should the bot behave? What knowledge should it have?"
-                className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all text-slate-700 dark:text-slate-200 resize-none"
+                placeholder="Details about the property, area, amenities..."
+                className="bg-slate-50 dark:bg-slate-900 border-none rounded-xl px-4 py-3 text-slate-700 dark:text-slate-200 resize-none text-sm"
               />
             </div>
           </section>
@@ -142,72 +139,88 @@ const ChatbotBuilder: React.FC = () => {
         {/* Right Pane: Preview */}
         <div className="w-1/2 bg-slate-100 dark:bg-slate-900/50 p-8 flex flex-col items-center justify-center relative">
           <div className="absolute top-8 left-8">
-            <h3 className="text-sm font-bold text-slate-400 flex items-center gap-2 uppercase tracking-widest">
+            <h3 className="text-[10px] font-black text-slate-400 flex items-center gap-2 uppercase tracking-[0.2em]">
               <span className="relative flex h-2 w-2">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
               </span>
-              Live Preview
+              In-Tour Simulation
             </h3>
           </div>
 
-          {/* Phone Frame */}
-          <div className="w-[360px] h-[640px] bg-white dark:bg-surface-dark rounded-[40px] shadow-2xl border-8 border-slate-200 dark:border-slate-800 flex flex-col overflow-hidden relative">
-            {/* App Header */}
-            <div className="p-6 brand-gradient text-white flex items-center gap-3">
-              <div className="size-10 rounded-full bg-white/20 flex items-center justify-center backdrop-blur-md">
-                <span className="material-symbols-outlined text-xl">smart_toy</span>
-              </div>
-              <div>
-                <h4 className="font-bold text-sm leading-none">{config.name}</h4>
-                <p className="text-[10px] opacity-80 mt-1">{config.personality} Assistant</p>
-              </div>
+          {/* Virtual Phone / Tour HUD */}
+          <div className="w-[340px] h-[600px] bg-slate-200 dark:bg-slate-800 rounded-[48px] shadow-2xl border-[10px] border-slate-300 dark:border-slate-700 flex flex-col overflow-hidden relative">
+            {/* Background 360 simulation */}
+            <div className="absolute inset-0 z-0">
+               <img src="https://picsum.photos/600/1200?r=50" className="w-full h-full object-cover blur-sm opacity-60" alt="" />
+               <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/60"></div>
             </div>
 
-            {/* Chat Area */}
-            <div 
-              ref={scrollRef}
-              className="flex-1 p-4 overflow-y-auto flex flex-col gap-3 bg-slate-50 dark:bg-background-dark"
-            >
-              {previewMessages.map((m, i) => (
-                <div key={i} className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-                  <div className={`max-w-[85%] px-3 py-2 rounded-2xl text-xs ${
-                    m.role === 'user' 
-                      ? 'bg-primary text-white rounded-tr-none' 
-                      : 'bg-white dark:bg-surface-dark text-slate-700 dark:text-slate-200 shadow-sm border border-slate-100 dark:border-slate-800 rounded-tl-none'
-                  }`}>
-                    {m.text}
-                  </div>
-                </div>
-              ))}
-              {isTyping && (
-                <div className="flex justify-start">
-                  <div className="bg-white dark:bg-surface-dark px-3 py-2 rounded-2xl rounded-tl-none shadow-sm flex gap-1">
-                    <span className="animate-bounce text-primary text-[10px]">•</span>
-                    <span className="animate-bounce delay-75 text-primary text-[10px]">•</span>
-                    <span className="animate-bounce delay-150 text-primary text-[10px]">•</span>
-                  </div>
-                </div>
-              )}
-            </div>
+            {/* Tour Overlay UI */}
+            <div className="relative z-10 flex flex-col h-full">
+              <div className="p-6 flex justify-between items-center text-white">
+                 <button className="size-10 rounded-full bg-black/40 backdrop-blur-md flex items-center justify-center"><span className="material-symbols-outlined">menu</span></button>
+                 <div className="text-center">
+                    <h4 className="text-xs font-black uppercase tracking-widest">Penthouse Suite</h4>
+                    <p className="text-[9px] opacity-70">360° Living Area</p>
+                 </div>
+                 <button className="size-10 rounded-full bg-black/40 backdrop-blur-md flex items-center justify-center"><span className="material-symbols-outlined">map</span></button>
+              </div>
 
-            {/* Input Area */}
-            <div className="p-4 bg-white dark:bg-surface-dark border-t border-slate-100 dark:border-slate-800">
-              <div className="relative">
-                <input 
-                  type="text"
-                  placeholder="Type a message..."
-                  value={previewInput}
-                  onChange={(e) => setPreviewInput(e.target.value)}
-                  onKeyDown={(e) => e.key === 'Enter' && handlePreviewSend()}
-                  className="w-full bg-slate-100 dark:bg-slate-900 border-none rounded-full px-4 py-2 text-xs focus:ring-1 focus:ring-primary"
-                />
-                <button 
-                  onClick={handlePreviewSend}
-                  className="absolute right-1 top-1 size-7 bg-primary rounded-full text-white flex items-center justify-center hover:scale-105 transition-transform"
+              <div className="flex-1"></div>
+
+              {/* Chat Overlay */}
+              <div className="m-4 p-4 bg-white/90 dark:bg-surface-dark/95 backdrop-blur-xl rounded-[32px] shadow-2xl flex flex-col gap-3 border border-white/20">
+                <div className="flex items-center gap-3 border-b border-slate-100 dark:border-slate-800 pb-3">
+                   <div className="size-8 rounded-full bg-primary text-white flex items-center justify-center"><span className="material-symbols-outlined text-sm">smart_toy</span></div>
+                   <div>
+                      <h5 className="text-[10px] font-black text-secondary dark:text-white uppercase tracking-widest leading-none">{config.name}</h5>
+                      <p className="text-[9px] text-slate-400 mt-1">{config.personality} Guide</p>
+                   </div>
+                </div>
+                
+                <div 
+                  ref={scrollRef}
+                  className="max-h-48 overflow-y-auto space-y-3 px-1"
                 >
-                  <span className="material-symbols-outlined text-sm">send</span>
-                </button>
+                  {previewMessages.map((m, i) => (
+                    <div key={i} className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+                      <div className={`px-3 py-2 rounded-2xl text-[11px] leading-relaxed ${
+                        m.role === 'user' 
+                          ? 'bg-primary text-white font-medium' 
+                          : 'text-slate-600 dark:text-slate-200'
+                      }`}>
+                        {m.text}
+                      </div>
+                    </div>
+                  ))}
+                  {isTyping && (
+                    <div className="flex justify-start">
+                      <div className="flex gap-1">
+                        <span className="animate-bounce text-primary text-xs">•</span>
+                        <span className="animate-bounce delay-75 text-primary text-xs">•</span>
+                        <span className="animate-bounce delay-150 text-primary text-xs">•</span>
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                <div className="relative mt-2">
+                  <input 
+                    type="text"
+                    placeholder="Ask about this room..."
+                    value={previewInput}
+                    onChange={(e) => setPreviewInput(e.target.value)}
+                    onKeyDown={(e) => e.key === 'Enter' && handlePreviewSend()}
+                    className="w-full bg-slate-50 dark:bg-slate-800 border-none rounded-full px-4 py-2 text-[11px] focus:ring-1 focus:ring-primary h-9"
+                  />
+                  <button 
+                    onClick={handlePreviewSend}
+                    className="absolute right-1 top-1 size-7 bg-primary rounded-full text-white flex items-center justify-center"
+                  >
+                    <span className="material-symbols-outlined text-sm">send</span>
+                  </button>
+                </div>
               </div>
             </div>
           </div>
