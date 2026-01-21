@@ -22,16 +22,6 @@ const Sidebar: React.FC<SidebarProps> = ({ activeNav, setActiveNav }) => {
   return (
     <aside className="flex w-72 flex-col justify-between border-r border-slate-200 dark:border-slate-800 bg-surface-light dark:bg-surface-dark h-full shrink-0 transition-colors duration-300">
       <div className="flex flex-col gap-6 p-6">
-        <div className="flex items-center gap-3 pb-6 border-b border-slate-100 dark:border-slate-800">
-          <div className="relative flex items-center justify-center size-12 rounded-xl bg-primary text-white shadow-soft">
-            <span className="material-symbols-outlined text-3xl">streetview</span>
-          </div>
-          <div className="flex flex-col">
-            <h1 className="text-secondary dark:text-white text-lg font-bold leading-tight uppercase tracking-tighter">Vortex</h1>
-            <p className="text-slate-500 dark:text-slate-400 text-[10px] font-black uppercase tracking-widest">Tours & Analytics</p>
-          </div>
-        </div>
-
         <nav className="flex flex-col gap-1">
           {menuItems.map((item) => (
             <button
