@@ -26,13 +26,20 @@ const ChatbotBuilder: React.FC = () => {
   const handlePreviewSend = async () => {
     if (!previewInput.trim() || isTyping) return;
 
+    const apiKey = process.env.API_KEY;
+    if (!apiKey) {
+      setPreviewMessages(prev => [...prev, { role: 'user', text: previewInput.trim() }, { role: 'model', text: "Error: No API Key found in environment. Please configure your key to use live preview." }]);
+      setPreviewInput('');
+      return;
+    }
+
     const userText = previewInput.trim();
     setPreviewInput('');
     setPreviewMessages(prev => [...prev, { role: 'user', text: userText }]);
     setIsTyping(true);
 
     try {
-      const ai = new GoogleGenAI({ apiKey: process.env.API_KEY || '' });
+      const ai = new GoogleGenAI({ apiKey });
       const response = await ai.models.generateContent({
         model: 'gemini-3-flash-preview',
         contents: [...previewMessages, { role: 'user', text: userText }].map(m => ({
